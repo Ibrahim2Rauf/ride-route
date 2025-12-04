@@ -4,7 +4,6 @@
 #include <string>
 using namespace std;
 
-// Rider structure
 struct Rider {
     int id;
     string name;
@@ -14,22 +13,24 @@ struct Rider {
     Rider* next;
 };
 
-// Linked List of Riders
 class RiderList {
 private:
     Rider* head;
-    int generateID(); // generate unique ID
 public:
     RiderList();
     ~RiderList();
 
-    void loadFromFile(const string& filename); // load riders from file
-    void saveToFile(const string& filename);   // save riders to file
+    int generateID();
+    void loadFromFile(const string& filename);
+    void saveToFile(const string& filename);
 
-    void registerRider();       // registration
-    bool loginRider(int &riderID);  // login, returns true if successful, sets riderID
-    void viewRiderProfile(int riderID); // show rider info
-    void addWallet(int riderID, double amount); // add money to wallet
+    void registerRider();
+    bool loginRider(int &riderID);
+    void viewRiderProfile(int riderID);
+    void addWallet(int riderID, double amount);
+
+    // Helper to get Rider pointer by ID (optional, useful for menu)
+    Rider* getRider(int riderID);
 };
 
 #endif
