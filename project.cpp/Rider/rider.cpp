@@ -6,9 +6,7 @@
 using namespace std;
 
 // Constructor
-RiderList::RiderList() {
-    head = nullptr;
-}
+RiderList::RiderList() { head = nullptr; }
 
 // Destructor
 RiderList::~RiderList() {
@@ -25,8 +23,7 @@ int RiderList::generateID() {
     int maxID = 0;
     Rider* temp = head;
     while(temp) {
-        if(temp->id > maxID)
-            maxID = temp->id;
+        if(temp->id > maxID) maxID = temp->id;
         temp = temp->next;
     }
     return maxID + 1;
@@ -35,7 +32,7 @@ int RiderList::generateID() {
 // Load riders from file
 void RiderList::loadFromFile(const string& filename) {
     ifstream fin(filename);
-    if(!fin) return; // file may not exist
+    if(!fin) return;
 
     string line;
     while(getline(fin, line)) {
@@ -76,13 +73,12 @@ void RiderList::registerRider() {
     cout << "Enter Name: "; cin.ignore(); getline(cin, newRider->name);
     cout << "Enter Phone: "; cin >> newRider->phone;
     cout << "Enter Password: "; cin >> newRider->password;
-    newRider->wallet = 1000; // default wallet balance
+    newRider->wallet = 1000.0; // default wallet
     newRider->next = head;
     head = newRider;
 
-    saveToFile("riders.txt");
+    saveToFile("Rider/riders.txt");
     cout << "Registration successful! Your Rider ID is: " << newRider->id << "\n";
-    system("pause");
 }
 
 // Login Rider
@@ -96,13 +92,11 @@ bool RiderList::loginRider(int &riderID) {
         if(temp->phone == phone && temp->password == password) {
             cout << "Login successful! Welcome, " << temp->name << "\n";
             riderID = temp->id;
-            system("pause");
             return true;
         }
         temp = temp->next;
     }
     cout << "Login failed! Invalid credentials.\n";
-    system("pause");
     return false;
 }
 
@@ -116,13 +110,11 @@ void RiderList::viewRiderProfile(int riderID) {
             cout << "Name: " << temp->name << "\n";
             cout << "Phone: " << temp->phone << "\n";
             cout << "Wallet: " << fixed << setprecision(2) << temp->wallet << "\n";
-            system("pause");
             return;
         }
         temp = temp->next;
     }
     cout << "Rider not found!\n";
-    system("pause");
 }
 
 // Add money to wallet
@@ -132,12 +124,20 @@ void RiderList::addWallet(int riderID, double amount) {
         if(temp->id == riderID) {
             temp->wallet += amount;
             cout << "Wallet updated! New balance: " << fixed << setprecision(2) << temp->wallet << "\n";
-            saveToFile("riders.txt");
-            system("pause");
+            saveToFile("Rider/riders.txt");
             return;
         }
         temp = temp->next;
     }
     cout << "Rider not found!\n";
-    system("pause");
+}
+
+// Helper function
+Rider* RiderList::getRider(int riderID) {
+    Rider* temp = head;
+    while(temp) {
+        if(temp->id == riderID) return temp;
+        temp = temp->next;
+    }
+    return nullptr;
 }
