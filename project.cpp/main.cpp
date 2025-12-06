@@ -1,34 +1,46 @@
 #include <iostream>
 #include <iomanip>
 #include "Rider/Rider.h"
+#include "Driver/Driver.h"
 
 using namespace std;
 
+// Global objects
 RiderList riders;
-int currentRiderID = -1; // store logged-in rider
+DriverList drivers;
+
+// Logged-in user IDs
+int currentRiderID = -1;
+int currentDriverID = -1;
 
 // Function declarations
 void riderMenu();
 void registerRider();
 void loginRider();
-void bookRide();
-void viewRideHistory();
-void riderSOS();
 void addWallet();
 
-// Placeholders for other modules
-void driverMenu() { cout << "[Driver module placeholder]\n"; system("pause"); }
-void adminMenu() { cout << "[Admin module placeholder]\n"; system("pause"); }
+// Driver menu functions
+void driverMenu();
+void registerDriver();
+void loginDriver();
+void updateDriverFare();
+void driverAcceptRide();
+
+void adminMenu() {
+    cout << "[Admin module placeholder]\n";
+    system("pause");
+}
 
 int main() {
     riders.loadFromFile("Rider/riders.txt");
+    drivers.loadFromFile("Driver/drivers.txt");
 
     int choice;
     do {
         system("cls");
-        cout << "----- Smart Ride Sharing -----\n";
+        cout << "----- Smart Ride Sharing System -----\n";
         cout << "1. Rider Login / Register\n";
-        cout << "2. Driver (placeholder)\n";
+        cout << "2. Driver Login / Register\n";
         cout << "3. Admin (placeholder)\n";
         cout << "0. Exit\n";
         cout << "Enter choice: ";
@@ -46,6 +58,8 @@ int main() {
     return 0;
 }
 
+/* ================== RIDER MENU ================== */
+
 void riderMenu() {
     int choice;
     do {
@@ -54,8 +68,10 @@ void riderMenu() {
 
         if(currentRiderID != -1) {
             Rider* r = riders.getRider(currentRiderID);
-            if(r) cout << "Logged in as: " << r->name 
-                        << " | Wallet: " << fixed << setprecision(2) << r->wallet << "\n";
+            if(r) {
+                cout << "Logged in as: " << r->name 
+                     << " | Wallet: " << fixed << setprecision(2) << r->wallet << "\n";
+            }
         }
 
         cout << "1. Register Rider\n";
@@ -71,14 +87,14 @@ void riderMenu() {
         switch(choice) {
             case 1: registerRider(); break;
             case 2: loginRider(); break;
-            case 3: bookRide(); break;
-            case 4: viewRideHistory(); break;
-            case 5: riderSOS(); break;
+            case 3: cout << "[Placeholder] Book Ride\n"; system("pause"); break;
+            case 4: cout << "[Placeholder] Ride History\n"; system("pause"); break;
+            case 5: cout << "[Placeholder] SOS\n"; system("pause"); break;
             case 6: addWallet(); break;
-            case 0: 
-                cout << "Logging out...\n"; 
-                currentRiderID = -1; 
-                system("pause"); 
+            case 0:
+                cout << "Logging out...\n";
+                currentRiderID = -1;
+                system("pause");
                 break;
             default: cout << "Invalid choice!\n"; system("pause");
         }
@@ -86,14 +102,9 @@ void riderMenu() {
 }
 
 void registerRider() { 
-    riders.registerRider(); 
-    // get the last added rider (the one we just registered)
-    int lastID = riders.generateID() - 1; // because generateID gives next ID
-    currentRiderID = lastID;
-    cout << "\nAuto-login successful!\n";
-    riders.viewRiderProfile(currentRiderID); // shows wallet immediately
+    riders.registerRider();
+    system("pause");
 }
-
 
 void loginRider() {
     int riderID;
@@ -104,16 +115,91 @@ void loginRider() {
     }
 }
 
-void bookRide() { cout << "[Placeholder] Book Ride\n"; system("pause"); }
-void viewRideHistory() { cout << "[Placeholder] Ride History\n"; system("pause"); }
-void riderSOS() { cout << "[Placeholder] SOS\n"; system("pause"); }
-
 void addWallet() {
     if(currentRiderID == -1) {
-        cout << "Please login first!\n"; system("pause"); return;
+        cout << "Please login first!\n"; 
+        system("pause"); 
+        return;
     }
     double amt;
-    cout << "Enter amount to add: "; cin >> amt;
+    cout << "Enter amount to add: "; 
+    cin >> amt;
     riders.addWallet(currentRiderID, amt);
+    system("pause");
+}
+
+/* ================== DRIVER MENU ================== */
+
+void driverMenu() {
+    int choice;
+    do {
+        system("cls");
+        cout << "----- Driver Panel -----\n";
+
+        if(currentDriverID != -1) {
+            Driver* d = drivers.getDriver(currentDriverID);
+            if(d) {
+                cout << "Logged in as: " << d->name
+                     << " | Fare/km: " << fixed << setprecision(2) << d->farePerKm
+                     << " | Wallet: " << d->wallet << "\n";
+            }
+        }
+
+        cout << "1. Register Driver\n";
+        cout << "2. Login Driver\n";
+        cout << "3. Update Fare Per KM\n";
+        cout << "4. Accept Ride (placeholder)\n";
+        cout << "0. Logout\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch(choice) {
+            case 1: registerDriver(); break;
+            case 2: loginDriver(); break;
+            case 3: updateDriverFare(); break;
+            case 4: driverAcceptRide(); break;
+            case 0: 
+                cout << "Logging out...\n";
+                currentDriverID = -1;
+                system("pause");
+                break;
+            default:
+                cout << "Invalid choice!\n"; 
+                system("pause");
+        }
+
+    } while(choice != 0);
+}
+
+void registerDriver() {
+    drivers.registerDriver();
+    system("pause");
+}
+
+void loginDriver() {
+    int driverID;
+    if(drivers.loginDriver(driverID)) {
+        currentDriverID = driverID;
+        drivers.viewDriverProfile(driverID);
+        system("pause");
+    }
+}
+
+void updateDriverFare() {
+    if(currentDriverID == -1) {
+        cout << "Please login first!\n"; system("pause"); return;
+    }
+    double newFare;
+    cout << "Enter new fare per KM: ";
+    cin >> newFare;
+    drivers.updateFare(currentDriverID, newFare);
+    system("pause");
+}
+
+void driverAcceptRide() {
+    if(currentDriverID == -1) {
+        cout << "Please login first!\n"; system("pause"); return;
+    }
+    drivers.acceptRide(currentDriverID);
     system("pause");
 }
