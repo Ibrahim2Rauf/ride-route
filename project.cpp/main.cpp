@@ -1,13 +1,16 @@
 #include <iostream>
 #include <iomanip>
+
 #include "Rider/Rider.h"
 #include "Driver/Driver.h"
+#include "Vehicle/Vehicle.h"
 
 using namespace std;
 
 // Global objects
 RiderList riders;
 DriverList drivers;
+VehicleList vehicles;   // vehicle module
 
 // Logged-in user IDs
 int currentRiderID = -1;
@@ -19,7 +22,6 @@ void registerRider();
 void loginRider();
 void addWallet();
 
-// Driver menu functions
 void driverMenu();
 void registerDriver();
 void loginDriver();
@@ -32,8 +34,14 @@ void adminMenu() {
 }
 
 int main() {
+
+    // Load files
     riders.loadFromFile("Rider/riders.txt");
     drivers.loadFromFile("Driver/drivers.txt");
+    vehicles.loadFromFile("Vehicle/vehicles.txt");
+
+    // Link modules
+    drivers.linkVehicleModule(&vehicles);
 
     int choice;
     do {
@@ -51,7 +59,9 @@ int main() {
             case 2: driverMenu(); break;
             case 3: adminMenu(); break;
             case 0: cout << "Exiting...\n"; break;
-            default: cout << "Invalid choice!\n"; system("pause");
+            default:
+                cout << "Invalid choice!\n";
+                system("pause");
         }
     } while(choice != 0);
 
@@ -80,6 +90,7 @@ void riderMenu() {
         cout << "4. View Ride History (placeholder)\n";
         cout << "5. SOS / Emergency (placeholder)\n";
         cout << "6. Add Money to Wallet\n";
+        cout << "7. Delete Rider Account\n";
         cout << "0. Logout\n";
         cout << "Enter choice: ";
         cin >> choice;
@@ -91,6 +102,15 @@ void riderMenu() {
             case 4: cout << "[Placeholder] Ride History\n"; system("pause"); break;
             case 5: cout << "[Placeholder] SOS\n"; system("pause"); break;
             case 6: addWallet(); break;
+            case 7:
+                if (currentRiderID == -1) {
+                    cout << "Please login first!\n";
+                } else {
+                    riders.deleteRider(currentRiderID);
+                    currentRiderID = -1;
+                }
+                system("pause");
+                break;
             case 0:
                 cout << "Logging out...\n";
                 currentRiderID = -1;
@@ -149,6 +169,7 @@ void driverMenu() {
         cout << "2. Login Driver\n";
         cout << "3. Update Fare Per KM\n";
         cout << "4. Accept Ride (placeholder)\n";
+        cout << "5. Delete Driver Account\n";
         cout << "0. Logout\n";
         cout << "Enter choice: ";
         cin >> choice;
@@ -158,6 +179,15 @@ void driverMenu() {
             case 2: loginDriver(); break;
             case 3: updateDriverFare(); break;
             case 4: driverAcceptRide(); break;
+            case 5:
+                if (currentDriverID == -1) {
+                    cout << "Please login first!\n";
+                } else {
+                    drivers.deleteDriver(currentDriverID);
+                    currentDriverID = -1;
+                }
+                system("pause");
+                break;
             case 0: 
                 cout << "Logging out...\n";
                 currentDriverID = -1;
