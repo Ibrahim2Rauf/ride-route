@@ -141,3 +141,32 @@ Rider* RiderList::getRider(int riderID) {
     }
     return nullptr;
 }
+
+// DELETE rider
+void RiderList::deleteRider(int riderID) {
+    if (!head) {
+        cout << "No riders found!\n";
+        return;
+    }
+
+    Rider* temp = head;
+    Rider* prev = nullptr;
+
+    while (temp) {
+        if (temp->id == riderID) {
+            if (prev == nullptr) {
+                head = temp->next;
+            } else {
+                prev->next = temp->next;
+            }
+            delete temp;
+            saveToFile("Rider/riders.txt");
+            cout << "Rider deleted successfully!\n";
+            return;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+
+    cout << "Rider not found!\n";
+}
