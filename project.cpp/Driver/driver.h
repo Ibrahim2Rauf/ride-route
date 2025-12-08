@@ -4,6 +4,8 @@
 #include <string>
 using namespace std;
 
+#include "../Vehicle/Vehicle.h"   // link vehicle module
+
 struct Driver {
     int id;
     string name;
@@ -15,7 +17,7 @@ struct Driver {
     string status;      
     double farePerKm;
     double wallet;
-    string vehicleNumber; // link to Vehicle module
+    string vehicleNumber;
     Driver* next;
 };
 
@@ -24,10 +26,17 @@ private:
     static const int TABLE_SIZE = 10;
     Driver* table[TABLE_SIZE];
 
+    // vehicle module pointer
+    VehicleList* vehicles;
+
     int hashFunc(int id);
+
 public:
     DriverList();
     ~DriverList();
+
+    // link vehicle module
+    void linkVehicleModule(VehicleList* v);
 
     int generateID();
     void loadFromFile(const string& filename);
@@ -37,11 +46,12 @@ public:
     bool loginDriver(int &driverID);
     void viewDriverProfile(int driverID);
     void updateFare(int driverID, double newFare);
-    void acceptRide(int driverID); // placeholder
+    void acceptRide(int driverID);
 
-    // helpers
+    // DELETE
+    void deleteDriver(int driverID);
     Driver* getDriver(int driverID);
-    Driver* findByPhone(const string& phone); // search across table
+    Driver* findByPhone(const string& phone);
 };
 
 #endif
