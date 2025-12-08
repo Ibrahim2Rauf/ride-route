@@ -31,6 +31,9 @@ public:
 
     // Helper to get Rider pointer by ID (optional, useful for menu)
     Rider* getRider(int riderID);
+
+    // DELETE
+    void deleteRider(int riderID);
 };
 
 #endif
