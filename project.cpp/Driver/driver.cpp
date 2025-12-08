@@ -10,6 +10,12 @@ const int DriverList::TABLE_SIZE;
 // Constructor
 DriverList::DriverList() {
     for (int i = 0; i < TABLE_SIZE; ++i) table[i] = nullptr;
+    vehicles = nullptr;   // Added
+}
+
+// Link vehicle module
+void DriverList::linkVehicleModule(VehicleList* v) {
+    vehicles = v;
 }
 
 // Destructor
@@ -109,7 +115,7 @@ void DriverList::saveToFile(const string& filename) {
     fout.close();
 }
 
-// Register Driver (interactive)
+// Register Driver
 void DriverList::registerDriver() {
     Driver* d = new Driver;
     d->id = generateID();
@@ -118,11 +124,17 @@ void DriverList::registerDriver() {
     cout << "Enter Password: "; cin >> d->password;
     cout << "Enter CNIC: "; cin >> d->cnic;
     cout << "Enter Age: "; cin >> d->age;
-     d->rating = 4.5;
+    d->rating = 4.5;
     d->status = "Available";
     cout << "Enter Fare per KM: "; cin >> d->farePerKm;
-    d->wallet = 500.0; // default as you chose
-    cout << "Enter Vehicle Number (linked): "; cin >> d->vehicleNumber;
+    d->wallet = 500.0;
+
+    // ⭐ ADD VEHICLE AUTOMATICALLY
+    if (vehicles != nullptr) {
+        vehicles->addVehicle(d->id);
+    }
+
+    d->vehicleNumber = "AUTO";  // Not used now but kept for file compatibility
 
     int idx = hashFunc(d->id);
     d->next = table[idx];
@@ -144,7 +156,7 @@ Driver* DriverList::findByPhone(const string& phone) {
     return nullptr;
 }
 
-// Login Driver (by phone + password)
+// Login Driver
 bool DriverList::loginDriver(int &driverID) {
     string phone, password;
     cout << "Enter Phone: "; cin >> phone;
@@ -160,7 +172,7 @@ bool DriverList::loginDriver(int &driverID) {
     return false;
 }
 
-// View driver profile by ID
+// View driver profile
 void DriverList::viewDriverProfile(int driverID) {
     Driver* d = getDriver(driverID);
     if (!d) { cout << "Driver not found!\n"; return; }
@@ -175,7 +187,12 @@ void DriverList::viewDriverProfile(int driverID) {
     cout << "Status: " << d->status << "\n";
     cout << "Fare per KM: " << fixed << setprecision(2) << d->farePerKm << "\n";
     cout << "Wallet: " << fixed << setprecision(2) << d->wallet << "\n";
-    cout << "Vehicle Number: " << d->vehicleNumber << "\n";
+
+    // ⭐ Display linked vehicle
+    if (vehicles != nullptr) {
+        cout << "\n--- VEHICLE INFO ---\n";
+        vehicles->displayVehicle(driverID);
+    }
 }
 
 // Update fare
@@ -184,20 +201,68 @@ void DriverList::updateFare(int driverID, double newFare) {
     if (!d) { cout << "Driver not found!\n"; return; }
     d->farePerKm = newFare;
     saveToFile("Driver/drivers.txt");
-    cout << "Fare updated to " << fixed << setprecision(2) << newFare << " per KM\n";
+    cout << "Fare updated.\n";
 }
 
 // Accept ride (placeholder)
 void DriverList::acceptRide(int driverID) {
     Driver* d = getDriver(driverID);
     if (!d) { cout << "Driver not found!\n"; return; }
-    // placeholder: toggle status
+
     d->status = "Busy";
     saveToFile("Driver/drivers.txt");
-    cout << "Driver " << d->name << " accepted a ride. Status set to Busy.\n";
+    cout << "Ride Accepted.\n";
 }
 
-// Get driver pointer by ID
+// DELETE driver (plus delete linked vehicle)
+void DriverList::deleteDriver(int driverID) {
+    int idx = hashFunc(driverID);
+    Driver* cur = table[idx];
+    Driver* prev = nullptr;
+
+    while (cur) {
+        if (cur->id == driverID) {
+            // delete linked vehicle
+            if (vehicles != nullptr) {
+                vehicles->deleteVehicle(driverID);
+            }
+
+            if (prev == nullptr) {
+                table[idx] = cur->next;
+            } else {
+                prev->next = cur->next;
+            }
+            delete cur;
+            saveToFile("Driver/drivers.txt");
+            cout << "Driver deleted successfully!\n";
+            return;
+        }
+        prev = cur;
+        cur = cur->next;
+    }
+
+    // fallback full scan (if hash mismatch)
+    for (int i = 0; i < TABLE_SIZE; ++i) {
+        cur = table[i];
+        prev = nullptr;
+        while (cur) {
+            if (cur->id == driverID) {
+                if (vehicles != nullptr) vehicles->deleteVehicle(driverID);
+                if (prev == nullptr) table[i] = cur->next;
+                else prev->next = cur->next;
+                delete cur;
+                saveToFile("Driver/drivers.txt");
+                cout << "Driver deleted successfully!\n";
+                return;
+            }
+            prev = cur;
+            cur = cur->next;
+        }
+    }
+
+    cout << "Driver not found!\n";
+}
+
 Driver* DriverList::getDriver(int driverID) {
     int idx = hashFunc(driverID);
     Driver* cur = table[idx];
@@ -205,10 +270,10 @@ Driver* DriverList::getDriver(int driverID) {
         if (cur->id == driverID) return cur;
         cur = cur->next;
     }
-    // fallback: full scan (in case hash mismatch)
+
     for (int i = 0; i < TABLE_SIZE; ++i) {
         cur = table[i];
-        while(cur) {
+        while (cur) {
             if (cur->id == driverID) return cur;
             cur = cur->next;
         }
