@@ -170,3 +170,23 @@ void RiderList::deleteRider(int riderID) {
 
     cout << "Rider not found!\n";
 }
+// PRINT ALL RIDERS (For Admin Panel)
+void RiderList::printAll() {
+    if (!head) {
+        cout << "No riders available!\n";
+        return;
+    }
+
+    Rider* temp = head;
+    cout << "\n===== ALL REGISTERED RIDERS =====\n";
+
+    while (temp) {
+        cout << "ID: " << temp->id
+             << " | Name: " << temp->name
+             << " | Phone: " << temp->phone
+             << " | Wallet: " << fixed << setprecision(2) << temp->wallet
+             << "\n";
+        temp = temp->next;
+    }
+}
+
