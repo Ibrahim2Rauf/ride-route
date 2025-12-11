@@ -48,7 +48,7 @@ public:
     void viewDriverProfile(int driverID);
     void updateFare(int driverID, double newFare);
     void acceptRide(int driverID);
-    
+    void printAll(); // PRINT ALL Drivers (for Admin)
     // DELETE
     void deleteDriver(int driverID);
     Driver* getDriver(int driverID);
