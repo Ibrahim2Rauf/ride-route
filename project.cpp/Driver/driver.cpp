@@ -240,6 +240,7 @@ void DriverList::deleteDriver(int driverID) {
         prev = cur;
         cur = cur->next;
     }
+    
 
     // fallback full scan (if hash mismatch)
     for (int i = 0; i < TABLE_SIZE; ++i) {
@@ -262,6 +263,8 @@ void DriverList::deleteDriver(int driverID) {
 
     cout << "Driver not found!\n";
 }
+
+
 
 Driver* DriverList::getDriver(int driverID) {
     int idx = hashFunc(driverID);
