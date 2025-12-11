@@ -37,6 +37,7 @@ public:
 
     // link vehicle module
     void linkVehicleModule(VehicleList* v);
+    
 
     int generateID();
     void loadFromFile(const string& filename);
@@ -47,7 +48,7 @@ public:
     void viewDriverProfile(int driverID);
     void updateFare(int driverID, double newFare);
     void acceptRide(int driverID);
-
+    
     // DELETE
     void deleteDriver(int driverID);
     Driver* getDriver(int driverID);
