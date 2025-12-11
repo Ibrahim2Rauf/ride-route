@@ -1,0 +1,2 @@
+1,2,Honda,CG-125,Black,LEA-1234,Bike,4.9
+2,3,Suzuki,Alto,White,ABC-9900,Car,4.7
