@@ -28,6 +28,7 @@ public:
     bool loginRider(int &riderID);
     void viewRiderProfile(int riderID);
     void addWallet(int riderID, double amount);
+    void printAll();   
 
     // Helper to get Rider pointer by ID (optional, useful for menu)
     Rider* getRider(int riderID);
