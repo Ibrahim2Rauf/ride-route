@@ -282,4 +282,23 @@ Driver* DriverList::getDriver(int driverID) {
         }
     }
     return nullptr;
+} // PRINT ALL Drivers (for Admin)
+void DriverList::printAll() {
+    cout << "\n===== ALL DRIVERS =====\n";
+
+    for (int i = 0; i < TABLE_SIZE; ++i) {
+        Driver* cur = table[i];
+        while (cur) {
+            cout << "ID: " << cur->id
+                 << " | Name: " << cur->name
+                 << " | Phone: " << cur->phone
+                 << " | CNIC: " << cur->cnic
+                 << " | Fare/km: " << fixed << setprecision(2) << cur->farePerKm
+                 << " | Status: " << cur->status
+                 << " | Wallet: " << fixed << setprecision(2) << cur->wallet
+                 << "\n";
+            cur = cur->next;
+        }
+    }
 }
+
