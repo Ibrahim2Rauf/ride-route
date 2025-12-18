@@ -213,6 +213,14 @@ void DriverList::acceptRide(int driverID) {
     saveToFile("Driver/drivers.txt");
     cout << "Ride Accepted.\n";
 }
+void DriverList::completeRide(int driverID) {
+    Driver* d = getDriver(driverID);
+    if (!d) return;
+
+    d->status = "Available";
+    saveToFile("Driver/drivers.txt");
+}
+
 
 // DELETE driver (plus delete linked vehicle)
 void DriverList::deleteDriver(int driverID) {
