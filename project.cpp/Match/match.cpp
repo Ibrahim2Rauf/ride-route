@@ -115,18 +115,20 @@ int MatchEngine::matchRide(int riderID, int srcNode, int dstNode, bool preferChe
         Driver* d = drivers->getDriver(chosen);
         if (!d) return -1;
 
-        int dist = INF_DIST;
-        if (chosen >=0 && chosen < MAX_DRIVERS_INDEX && driverLocation[chosen] != -1 && graph != nullptr) {
-            dist = graph->shortestDistance(driverLocation[chosen], srcNode);
-        } else {
-            dist = 0; // unknown distance
-        }
-        double totalCost = 0.0;
-        if (dist >= INF_DIST) totalCost = d->farePerKm; else totalCost = d->farePerKm * (double)dist;
+       // 🔹 Distance from PICKUP to DROP (THIS IS THE FARE DISTANCE)
+    int rideDistance = graph->shortestDistance(srcNode, dstNode);
 
-        outResult.driverID = chosen;
-        outResult.distance = (dist>=INF_DIST? -1: dist);
-        outResult.totalCost = totalCost;
+    if (rideDistance >= INF_DIST) {
+    cout << "Route not reachable!\n";
+    return -1;
+}
+
+    double totalCost = rideDistance * d->farePerKm;
+
+    outResult.driverID = chosen;
+    outResult.distance = rideDistance;
+    outResult.totalCost = totalCost;
+
         return chosen;
     }
 
