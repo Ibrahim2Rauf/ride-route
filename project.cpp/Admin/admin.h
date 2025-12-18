@@ -6,8 +6,8 @@ using namespace std;
 
 class Admin {
 private:
-    string adminUser = "admin";
-    string adminPass = "123";
+    string adminUser = "IBRAHIM";
+    string adminPass = "OBVIOUS";
 
 public:
     bool login();
