@@ -9,7 +9,7 @@ class DriverList;               // forward declare
 
 struct MatchResult {
     int driverID;
-    int distance;    // distance in graph units (INF if unknown)
+    double distance;    // distance in graph units (INF if unknown)
     double totalCost; // farePerKm * distance (or farePerKm if distance unknown)
 };
 
