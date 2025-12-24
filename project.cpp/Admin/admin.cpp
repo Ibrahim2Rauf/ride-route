@@ -1,4 +1,6 @@
 #include "Admin.h"
+#include "../Rider/Rider.h"
+#include "../Driver/Driver.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -159,4 +161,16 @@ void Admin::viewAllRides() {
         cout << line << "\n";
     }
     fin.close();
+}
+void Admin::deleteRider(int riderID, RiderList &riders) {
+    riders.deleteRider(riderID);
+    cout << "✅ Rider deleted successfully!\n";
+}
+
+/* ==========================
+   DELETE DRIVER
+========================== */
+void Admin::deleteDriver(int driverID, DriverList &drivers) {
+    drivers.deleteDriver(driverID);
+    cout << "✅ Driver deleted successfully!\n";
 }

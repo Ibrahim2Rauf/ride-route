@@ -4,6 +4,10 @@
 #include <string>
 using namespace std;
 
+// Forward declarations
+class RiderList;
+class DriverList;
+
 class Admin {
 private:
     string adminUser = "IBRAHIM";
@@ -16,6 +20,10 @@ public:
     void viewAllDrivers();
     void viewAllVehicles();
     void viewAllRides();
+
+   
+    void deleteRider(int riderID, RiderList &riders);
+    void deleteDriver(int driverID, DriverList &drivers);
 };
 
 #endif

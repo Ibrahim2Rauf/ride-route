@@ -493,6 +493,10 @@ void adminMenu() {
         cout << "          ║                                                  ║\n";
         cout << "          ║  " << WHITE << "5." << RESET << YELLOW << "  📜  View Complete Ride History                ║\n";
         cout << "          ║                                                  ║\n";
+        cout << "          ║  " << WHITE << "6." << RESET << YELLOW << "  🗑️  Delete Rider Account                      ║\n";
+        cout << "          ║                                                  ║\n";
+        cout << "          ║  " << WHITE << "7." << RESET << YELLOW << "  🗑️  Delete Driver Account                     ║\n";
+        cout << "          ║                                                  ║\n";
         cout << "          ║  " << WHITE << "0." << RESET << YELLOW << "  🚪  Exit Admin Panel                          ║\n";
         cout << "          ║                                                  ║\n";
         cout << "          ╚══════════════════════════════════════════════════╝\n" << RESET;
@@ -521,6 +525,28 @@ void adminMenu() {
                 cout << "\n" << CYAN << BOLD << "          ═══════════════ COMPLETE RIDE HISTORY ═══════════════\n\n" << RESET;
                 admin.viewAllRides(); 
                 break;
+                case 6: {
+    int         id;
+                cout << "\n" << RED << BOLD << "          ═══════════════ DELETE RIDER ═══════════════\n\n" << RESET;
+                cout << RED << "          🆔  " << RESET << "Enter Rider ID to delete: ";
+    cin >> id;
+
+    admin.deleteRider(id, riders);
+
+                cout << "\n" << GREEN << BOLD << "          ✔ Rider deletion process completed.\n" << RESET;
+} break;
+
+case 7: {
+    int id;
+               cout << "\n" << RED << BOLD << "          ═══════════════ DELETE DRIVER ═══════════════\n\n" << RESET;
+               cout << RED << "          🆔  " << RESET << "Enter Driver ID to delete: ";
+    cin >> id;
+
+    admin.deleteDriver(id, drivers);
+
+               cout << "\n" << GREEN << BOLD << "          ✔ Driver deletion process completed.\n" << RESET;
+} break;
+
         }
         cout << "\n";
         system("pause");
