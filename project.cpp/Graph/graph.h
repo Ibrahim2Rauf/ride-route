@@ -1,56 +1,44 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-// Simple graph with adjacency list (no STL).
-// Nodes are 1..MAX_NODES (you can change MAX_NODES as needed)
+#define MAX_NODES 100       // Graph me maximum nodes ka limit
+#define INF 1000000000      // Infinite distance (path nahi hai)
 
-#define MAX_NODES 100
-#define INF 1000000000
-
+// Edge structure: adjacency list ke liye
 struct Edge {
-    int to;
-    int weight;
-    Edge* next;
+    int to;                 // Edge kis node pe ja rahi hai
+    int weight;             // Edge ka weight (distance ya cost)
+    Edge* next;             // Next edge pointer (linked list)
 };
 
 class Graph {
 private:
-    Edge* adj[MAX_NODES + 1];
-    int nodeCount;
-
-    // Min-heap internals for Dijkstra (arrays)
+    Edge* adj[MAX_NODES + 1];   // Adjacency list array (1-based indexing)
+    int nodeCount;            
+    // Min-heap item structure Dijkstra ke liye
     struct HeapItem {
-        int node;
-        int dist;
-    };
+        int node;              
+        int dist;  };           
 
-    // heap functions (used internally)
-    void heapSwap(HeapItem* A, int i, int j);
-    void heapPush(HeapItem* heap, int &size, HeapItem item);
-    HeapItem heapPop(HeapItem* heap, int &size);
+    // ---------- Min-heap helper functions ----------
+    void heapSwap(HeapItem* A, int i, int j);             // Heap me do items swap karna
+    void heapPush(HeapItem* heap, int &size, HeapItem item); // Heap me naya item add karna (heapify up)
+    HeapItem heapPop(HeapItem* heap, int &size);          // Heap se smallest item nikalna (heapify down)
 
 public:
-    Graph();
-    ~Graph();
+    Graph();                     
+    ~Graph();                    
 
-    // set how many nodes you're using (1..n)
-    void setNodeCount(int n);
-    int getNodeCount();
+    void setNodeCount(int n);    // Graph ka size set karna
+    int getNodeCount();          // Graph me nodes ka count return karna
 
-    // add directed edge u -> v. If undirected, call twice.
-    void addEdge(int u, int v, int weight);
+    void addEdge(int u, int v, int weight);  // Node u se v tak edge add karna
 
-    // Dijkstra: fills distance[] and prev[] arrays passed by caller.
-    // distance and prev must be arrays of size at least MAX_NODES+1.
-    // Returns 1 if destination reachable, 0 otherwise.
+    // Dijkstra algorithm: shortest path find karna
     int dijkstra(int src, int dest, int distance[], int prev[]);
 
-    // Convenience: compute shortest distance only (returns INF if unreachable)
-    int shortestDistance(int src, int dest);
-
-    // Convenience: get path as array: returns length of path stored in path[] (path[0..len-1])
-    // Caller must pass path array (int path[MAX_NODES]) and will receive node sequence from src -> dest.
-    int getShortestPath(int src, int dest, int path[], int &pathLen);
+    int shortestDistance(int src, int dest); // Sirf shortest distance return karna
+    int getShortestPath(int src, int dest, int path[], int &pathLen); // Shortest path nodes return karna
 };
 
 #endif

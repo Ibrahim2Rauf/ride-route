@@ -1,4 +1,4 @@
-#ifndef DRIVER_H
+#ifndef DRIVER_H 
 #define DRIVER_H
 
 #include <string>
@@ -8,7 +8,7 @@ using namespace std;
 
 struct Driver {
     int id;
-    string name;
+    string name; 
     string phone;
     string password;
     string cnic;
@@ -29,18 +29,18 @@ private:
     // vehicle module pointer
     VehicleList* vehicles;
 
-    int hashFunc(int id);
+    int hashFunc(int id); // simple hash function
 
 public:
-    DriverList();
-    ~DriverList();
+    DriverList(); 
+    ~DriverList(); 
 
     // link vehicle module
     void linkVehicleModule(VehicleList* v);
     
 
-    int generateID();
-    void loadFromFile(const string& filename);
+    int generateID(); 
+    void loadFromFile(const string& filename); 
     void saveToFile(const string& filename);
 
     void registerDriver();
@@ -52,9 +52,9 @@ public:
 
     void printAll(); // PRINT ALL Drivers (for Admin)
     // DELETE
-    void deleteDriver(int driverID);
-    Driver* getDriver(int driverID);
-    Driver* findByPhone(const string& phone);
+    void deleteDriver(int driverID); 
+    Driver* getDriver(int driverID);  
+    Driver* findByPhone(const string& phone); 
 };
 
 #endif

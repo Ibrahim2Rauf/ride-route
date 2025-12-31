@@ -1,9 +1,8 @@
 #ifndef MATCH_H
 #define MATCH_H
 
-#include "../Graph/Graph.h"     // <<<<<< ADD THIS LINE
-class DriverList;               // forward declare
-
+#include "../Graph/Graph.h"     
+class DriverList;              
 #define MAX_DRIVERS_INDEX 1000  // driver IDs expected to be <= 999 (adjust if needed)
 #define MAX_MATCH_CAND 256
 
@@ -19,7 +18,7 @@ private:
     DriverList* drivers;         // pointer to driver list (not owning)
 
     // store driver location externally (driverID -> node). -1 = unknown.
-    // We'll make this map reasonably large; if driver IDs exceed, you can adjust constant.
+    // We'll make this map reasonably large; if driver IDs exceed,hum constant adjust krskte hain.
     int driverLocation[MAX_DRIVERS_INDEX];
 
     // internal heap for matching (min-heap of MatchResult by totalCost)
@@ -27,13 +26,13 @@ private:
         int driverID;
         double totalCost;
         int distance;
-    };
+    }; 
+     
 
     void heapSwap(HeapItem* A, int i, int j);
     void heapPush(HeapItem* A, int &size, HeapItem item);
     HeapItem heapPop(HeapItem* A, int &size);
-
-public:
+public: 
     MatchEngine();
     void linkGraph(Graph* g);
     void linkDrivers(DriverList* d);
