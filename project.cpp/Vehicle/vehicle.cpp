@@ -8,13 +8,13 @@ using namespace std;
 
 // Constructor
 VehicleList::VehicleList() {
-    head = nullptr;           // linked list initially empty
+    head = nullptr;           
 }
 
 // Destructor
 VehicleList::~VehicleList() {
     Vehicle* temp;
-    while (head) {            // jab tak list khatam na ho
+    while (head) {           
         temp = head;
         head = head->next;
         delete temp;          // memory free
@@ -27,7 +27,7 @@ int VehicleList::generateVehicleID() {
     Vehicle* temp = head;
     while (temp) {            // poori list traverse
         if (temp->vehicleID > maxID)
-            maxID = temp->vehicleID; // max vehicleID track
+            maxID = temp->vehicleID; 
         temp = temp->next;
     }
     return maxID + 1;         // next unique ID
@@ -36,21 +36,21 @@ int VehicleList::generateVehicleID() {
 // Load vehicles from file
 void VehicleList::loadFromFile(const string& filename) {
     ifstream fin(filename);
-    if (!fin) return;         // file exist nahi karti to exit
+    if (!fin) return;         
 
     string line;
     while (getline(fin, line)) { // har line read
         stringstream ss(line);
         Vehicle* v = new Vehicle;
 
-        getline(ss, line, ','); v->vehicleID = stoi(line); // vehicleID
-        getline(ss, line, ','); v->driverID = stoi(line);  // driverID
-        getline(ss, v->brand, ',');                         // brand
-        getline(ss, v->model, ',');                         // model
-        getline(ss, v->color, ',');                         // color
-        getline(ss, v->plateNumber, ',');                   // plate
-        getline(ss, v->type, ',');                          // type
-        getline(ss, line, ','); v->rating = stod(line);     // rating
+        getline(ss, line, ','); v->vehicleID = stoi(line); 
+        getline(ss, line, ','); v->driverID = stoi(line);  
+        getline(ss, v->brand, ',');                        
+        getline(ss, v->model, ',');                        
+        getline(ss, v->color, ',');                        
+        getline(ss, v->plateNumber, ',');             
+        getline(ss, v->type, ',');                    
+        getline(ss, line, ','); v->rating = stod(line);  
 
         v->next = head;         // front insertion
         head = v;

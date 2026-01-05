@@ -3,21 +3,19 @@
 
 #include "../Graph/Graph.h"     
 class DriverList;              
-#define MAX_DRIVERS_INDEX 1000  // driver IDs expected to be <= 999 (adjust if needed)
+#define MAX_DRIVERS_INDEX 1000  
 #define MAX_MATCH_CAND 256
 
 struct MatchResult {
     int driverID;
-    double distance;    // distance in graph units (INF if unknown)
-    double totalCost; // farePerKm * distance (or farePerKm if distance unknown)
+    double distance;   
+    double totalCost; 
 };
 
 class MatchEngine {
 private:
-    Graph* graph;                // pointer to graph (not owning)
-    DriverList* drivers;         // pointer to driver list (not owning)
-
-    // store driver location externally (driverID -> node). -1 = unknown.
+    Graph* graph;                
+    DriverList* drivers;         
     // We'll make this map reasonably large; if driver IDs exceed,hum constant adjust krskte hain.
     int driverLocation[MAX_DRIVERS_INDEX];
 
@@ -39,17 +37,10 @@ public:
 
     // set driver current location (node number)
     void setDriverLocation(int driverID, int node);
+    int matchByCheapestFare(int riderID); 
+    int matchByNearest(int srcNode); 
 
-    // match functions:
-    // match cheapest available driver (uses farePerKm only)
-    // returns driverID or -1 if none
-    int matchByCheapestFare(int riderID);
-
-    // match nearest driver to 'src' (requires driverLocation set for drivers)
-    // returns driverID or -1 if none available
-    int matchByNearest(int srcNode);
-
-    // combined match: preferCheapest = true chooses cheapest; otherwise nearest
+    
     int matchRide(int riderID, int srcNode, int dstNode, bool preferCheapest, MatchResult &outResult);
 };
 

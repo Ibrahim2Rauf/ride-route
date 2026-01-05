@@ -1,164 +1,162 @@
 #include "Graph.h"
-#include <cstring> // memset ke liye
+#include <cstring>
 #include <iostream>
 using namespace std;
 
-// Constructor: graph banate waqt adjacency list initialize karna
+/* ================== GRAPH CONSTRUCTOR ================== */
 Graph::Graph() {
-    nodeCount = MAX_NODES;           // initially max nodes ka size
-    for (int i = 0; i <= MAX_NODES; ++i) 
-        adj[i] = nullptr;            // har node ka adjacency list null se start
+    nodeCount = MAX_NODES;
+    for (int i = 0; i <= MAX_NODES; ++i)
+        adj[i] = nullptr;
 }
 
-// Destructor: memory leak na ho, dynamically allocated edges delete karna
+/* ================== GRAPH DESTRUCTOR ================== */
 Graph::~Graph() {
     for (int i = 0; i <= MAX_NODES; ++i) {
         Edge* e = adj[i];
-        while (e) {                  // har node ki linked list traverse
+        while (e) {
             Edge* t = e;
-            e = e->next;             // next edge pe move
-            delete t;                // purani edge delete
+            e = e->next;
+            delete t;
         }
-        adj[i] = nullptr;            // node ka pointer null
+        adj[i] = nullptr;
     }
 }
 
-// Set total nodes (graph ka size)
+/* ================== NODE COUNT SETTINGS ================== */
 void Graph::setNodeCount(int n) {
-    if (n < 1) n = 1;                // minimum 1 node
-    if (n > MAX_NODES) n = MAX_NODES; // max limit
+    if (n < 1) n = 1;
+    if (n > MAX_NODES) n = MAX_NODES;
     nodeCount = n;
 }
 
-// Get total nodes
-int Graph::getNodeCount() { 
-    return nodeCount; 
+int Graph::getNodeCount() {
+    return nodeCount;
 }
 
-// Add edge from u to v with weight
+/* ================== ADD EDGE ================== */
 void Graph::addEdge(int u, int v, int weight) {
-    if (u < 1 || u > nodeCount || v < 1 || v > nodeCount) return; // invalid node check
-    Edge* e = new Edge;               // new edge dynamically create
-    e->to = v;                        // destination node
-    e->weight = weight;               // edge weight
-    e->next = adj[u];                 // front insertion in linked list
-    adj[u] = e;                       // head update
+    if (u < 1 || u > nodeCount || v < 1 || v > nodeCount) return;
+    Edge* e = new Edge;
+    e->to = v;
+    e->weight = weight;
+    e->next = adj[u];
+    adj[u] = e;
 }
 
-/* ------------------ Min-heap helper functions ------------------ */
-
-// Swap two heap items
+/* ================== MIN HEAP — SWAP ================== */
 void Graph::heapSwap(HeapItem* A, int i, int j) {
     HeapItem tmp = A[i];
     A[i] = A[j];
     A[j] = tmp;
 }
 
-// Insert item into min-heap (heapify-up)
+/* ================== MIN HEAP — PUSH ================== */
 void Graph::heapPush(HeapItem* heap, int &size, HeapItem item) {
-    int i = ++size;                   // heap size increase
-    heap[i] = item;                   // add item at last
-    while (i > 1) {                   // bubble up
-        int p = i >> 1;               // parent index (i/2)
-        if (heap[p].dist <= heap[i].dist) break; // heap property check
-        heapSwap(heap, p, i);         // swap parent and child
-        i = p;                        // move up
+    int i = ++size;
+    heap[i] = item;
+    while (i > 1) {
+        int p = i >> 1;
+        if (heap[p].dist <= heap[i].dist) break;
+        heapSwap(heap, p, i);
+        i = p;
     }
 }
 
-// Remove smallest item from min-heap (heapify-down)
+/* ================== MIN HEAP — POP ================== */
 Graph::HeapItem Graph::heapPop(HeapItem* heap, int &size) {
-    HeapItem res = heap[1];           // smallest item at root
-    heap[1] = heap[size--];           // replace root with last
+    HeapItem res = heap[1];
+    heap[1] = heap[size--];
     int i = 1;
-    while (1) {                       // bubble down
-        int l = i << 1;               // left child
-        int r = l + 1;                // right child
+    while (1) {
+        int l = i << 1;
+        int r = l + 1;
         int smallest = i;
         if (l <= size && heap[l].dist < heap[smallest].dist) smallest = l;
         if (r <= size && heap[r].dist < heap[smallest].dist) smallest = r;
-        if (smallest == i) break;     // heap property satisfied
-        heapSwap(heap, i, smallest);  // swap parent with smallest child
+        if (smallest == i) break;
+        heapSwap(heap, i, smallest);
         i = smallest;
     }
-    return res;                       // return smallest item
+    return res;
 }
 
-/* ------------------ Dijkstra Algorithm ------------------ */
-
-// Find shortest path from src to dest
+/* ================== DIJKSTRA ALGORITHM ================== */
 int Graph::dijkstra(int src, int dest, int distance[], int prev[]) {
-    // Initialize distances and previous nodes
-    for (int i = 0; i <= nodeCount; ++i) {
-        distance[i] = INF;            // initially infinite distance
-        prev[i] = -1;                 // no previous node
-    }
-    if (src < 1 || src > nodeCount) return 0; // invalid source node
-    distance[src] = 0;                // source distance = 0
 
-    // Heap for Dijkstra: 1-based array
+    for (int i = 0; i <= nodeCount; ++i) {
+        distance[i] = INF;
+        prev[i] = -1;
+    }
+
+    if (src < 1 || src > nodeCount) return 0;
+    distance[src] = 0;
+
     HeapItem* heap = new HeapItem[nodeCount * 2 + 5];
     int heapSize = 0;
-    heapPush(heap, heapSize, HeapItem{src, 0}); // push source node
+    heapPush(heap, heapSize, HeapItem{src, 0});
 
-    bool visited[MAX_NODES + 1];      // track visited nodes
+    bool visited[MAX_NODES + 1];
     for (int i = 0; i <= nodeCount; ++i) visited[i] = false;
 
     while (heapSize > 0) {
-        HeapItem it = heapPop(heap, heapSize); // node with min distance
+        HeapItem it = heapPop(heap, heapSize);
         int u = it.node;
         int distU = it.dist;
-        if (visited[u]) continue;      // skip if already processed
+
+        if (visited[u]) continue;
         visited[u] = true;
-        if (u == dest) break;          // destination reached
+
+        if (u == dest) break;
 
         Edge* e = adj[u];
-        while (e) {                    // traverse adjacency list
+        while (e) {
             int v = e->to;
             int w = e->weight;
+
             if (!visited[v] && distance[v] > distU + w) {
-                distance[v] = distU + w;   // relax edge
-                prev[v] = u;               // store path
-                heapPush(heap, heapSize, HeapItem{v, distance[v]}); // push updated node
+                distance[v] = distU + w;
+                prev[v] = u;
+                heapPush(heap, heapSize, HeapItem{v, distance[v]});
             }
             e = e->next;
         }
     }
 
-    delete[] heap;                    // free heap memory
-    return (distance[dest] < INF) ? 1 : 0; // return 1 if path exists
+    delete[] heap;
+    return (distance[dest] < INF) ? 1 : 0;
 }
 
-// Get only shortest distance
+/* ================== SHORTEST DISTANCE ONLY ================== */
 int Graph::shortestDistance(int src, int dest) {
     int dist[MAX_NODES + 1];
     int prev[MAX_NODES + 1];
     int ok = dijkstra(src, dest, dist, prev);
-    if (!ok) return INF;              // path not found
-    return dist[dest];                // return distance
+    if (!ok) return INF;
+    return dist[dest];
 }
 
-// Get shortest path nodes
+/* ================== SHORTEST PATH NODES ================== */
 int Graph::getShortestPath(int src, int dest, int path[], int &pathLen) {
     int dist[MAX_NODES + 1];
     int prev[MAX_NODES + 1];
-    int ok = dijkstra(src, dest, dist, prev);
-    if (!ok) { pathLen = 0; return 0; } // path not found
 
-    // Reconstruct path from dest to src
+    int ok = dijkstra(src, dest, dist, prev);
+    if (!ok) { pathLen = 0; return 0; }
+
     int tmp[MAX_NODES + 1];
     int tlen = 0;
+
     int cur = dest;
     while (cur != -1) {
-        tmp[tlen++] = cur;            // store node
-        if (cur == src) break;        // reached source
-        cur = prev[cur];              // move to previous
+        tmp[tlen++] = cur;
+        if (cur == src) break;
+        cur = prev[cur];
     }
 
-    // Reverse path into path[]
     pathLen = 0;
-    for (int i = tlen - 1; i >= 0; --i) 
+    for (int i = tlen - 1; i >= 0; --i)
         path[pathLen++] = tmp[i];
 
-    return 1;                        // path found
+    return 1;
 }

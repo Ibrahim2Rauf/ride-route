@@ -5,25 +5,25 @@
 #include <iomanip>          
 using namespace std;
 
-const int DriverList::TABLE_SIZE;   // hash table ka fixed size
+const int DriverList::TABLE_SIZE;   
 
 // Constructor
 DriverList::DriverList() {
     for (int i = 0; i < TABLE_SIZE; ++i)
-        table[i] = nullptr;         // hash table ke sab buckets empty kiye
-    vehicles = nullptr;             // vehicle module ka pointer start mein null
+        table[i] = nullptr;         
+    vehicles = nullptr;             
 }
 
 // Link vehicle module
 void DriverList::linkVehicleModule(VehicleList* v) {
-    vehicles = v;                   // driver module ko vehicle module se link kiya
+    vehicles = v;                   
 }
 
 // Destructor
 DriverList::~DriverList() {
-    for (int i = 0; i < TABLE_SIZE; ++i) {   // poori hash table traverse
+    for (int i = 0; i < TABLE_SIZE; ++i) {   
         Driver* cur = table[i];
-        while (cur) {               // har bucket ki linked list delete
+        while (cur) {              
             Driver* t = cur;
             cur = cur->next;
             delete t;               
@@ -34,33 +34,33 @@ DriverList::~DriverList() {
 
 // Simple hash function (by id)
 int DriverList::hashFunc(int id) {
-    return id % TABLE_SIZE;         // id ko table size se mod karke index nikala
+    return id % TABLE_SIZE;         
 }
 
 // Generate unique ID (scan entire table for max id)
 int DriverList::generateID() {
-    int maxID = 0;                  // max id track karne ke liye
+    int maxID = 0;                  
     for (int i = 0; i < TABLE_SIZE; ++i) {
         Driver* cur = table[i];
-        while (cur) {               // poori hash table scan
+        while (cur) {              
             if (cur->id > maxID)
-                maxID = cur->id;    // sab se bari id save
+                maxID = cur->id;   
             cur = cur->next;
         }
     }
-    return maxID + 1;               // new unique id return
+    return maxID + 1;               
 }
 
 // Load drivers from file (CSV per line)
 void DriverList::loadFromFile(const string& filename) {
-    ifstream fin(filename);         // file open reading ke liye
-    if (!fin) return;               // file na mile to return
+    ifstream fin(filename);        
+    if (!fin) return;              
 
     string line;
-    while (getline(fin, line)) {    // har line read
-        if (line.size() == 0) continue; // empty line skip
+    while (getline(fin, line)) {    
+        if (line.size() == 0) continue; 
         stringstream ss(line);
-        Driver* d = new Driver;     // naya driver object
+        Driver* d = new Driver;    
         string token;
 
         getline(ss, token, ','); d->id = stoi(token);   
@@ -126,8 +126,8 @@ void DriverList::registerDriver() {
     cout << "Enter Age: ";
     cin >> d->age;
 
-    d->rating = 4.5;                 // default rating
-    d->status = "Available";         // default status
+    d->rating = 4.5;               
+    d->status = "Available";         
 
     cout << "Enter Fare per KM: ";
     cin >> d->farePerKm;
@@ -139,10 +139,10 @@ void DriverList::registerDriver() {
         vehicles->addVehicle(d->id);
     }
 
-    d->vehicleNumber = "AUTO";       // compatibility ke liye
+    d->vehicleNumber = "AUTO";      
 
-    int idx = hashFunc(d->id);       // hash index
-    d->next = table[idx];            // hash table insertion
+    int idx = hashFunc(d->id);       
+    d->next = table[idx];           
     table[idx] = d;
 
     saveToFile("Driver/drivers.txt"); // data file mein save
@@ -159,7 +159,7 @@ Driver* DriverList::findByPhone(const string& phone) {
             cur = cur->next;
         }
     }
-    return nullptr;                  // agar na mile
+    return nullptr;                  
 }
 
 // Login Driver
@@ -172,10 +172,10 @@ bool DriverList::loginDriver(int &driverID) {
     cout << "Enter Password: ";
     cin >> password;
 
-    Driver* d = findByPhone(phone);  // phone se driver find
+    Driver* d = findByPhone(phone);  
     if (d && d->password == password) {
         cout << "Login successful! Welcome, " << d->name << "\n";
-        driverID = d->id;            // logged in driver ki id
+        driverID = d->id;           
         return true;
     }
 
