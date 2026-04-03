@@ -7,24 +7,23 @@ using namespace std;
 
 #define INF_DIST 1000000000 
 
-// ------------------- Constructor -------------------
+
 MatchEngine::MatchEngine() {
     graph = nullptr;
     drivers = nullptr;
     for (int i = 0; i < MAX_DRIVERS_INDEX; ++i) driverLocation[i] = -1;
 }
 
-// ------------------- Module Linking -------------------
+
 void MatchEngine::linkGraph(Graph* g) { graph = g; }
 void MatchEngine::linkDrivers(DriverList* d) { drivers = d; }
 
-// ------------------- Set driver location -------------------
 void MatchEngine::setDriverLocation(int driverID, int node) {
     if (driverID >= 0 && driverID < MAX_DRIVERS_INDEX)
         driverLocation[driverID] = node;
 }
 
-// ------------------- Heap Helpers -------------------
+
 void MatchEngine::heapSwap(HeapItem* A, int i, int j) {
     HeapItem tmp = A[i];
     A[i] = A[j];
@@ -60,7 +59,7 @@ MatchEngine::HeapItem MatchEngine::heapPop(HeapItem* A, int &size) {
     return res;
 }
 
-// ------------------- Match by Cheapest Fare -------------------
+
 int MatchEngine::matchByCheapestFare(int riderID) {
     if (drivers == nullptr) return -1;
 
@@ -79,7 +78,6 @@ int MatchEngine::matchByCheapestFare(int riderID) {
     return bestDriver;
 }
 
-// ------------------- Match by Nearest Driver -------------------
 int MatchEngine::matchByNearest(int srcNode) {
     if (drivers == nullptr || graph == nullptr) return -1;
 
@@ -103,11 +101,10 @@ int MatchEngine::matchByNearest(int srcNode) {
     return bestDriver;
 }
 
-// ------------------- Main Ride Matching -------------------
+
 int MatchEngine::matchRide(int riderID, int srcNode, int dstNode, bool preferCheapest, MatchResult &outResult) {
     if (drivers == nullptr) return -1;
 
-    // ------------------- Cheapest Preference -------------------
     if (preferCheapest) {
         int chosen = matchByCheapestFare(riderID);
         if (chosen == -1) return -1;
@@ -127,7 +124,7 @@ int MatchEngine::matchRide(int riderID, int srcNode, int dstNode, bool preferChe
         return chosen;
     }
 
-    // ------------------- Nearest Preference -------------------
+
     if (graph == nullptr) return matchByCheapestFare(riderID);
 
     HeapItem heapArr[MAX_MATCH_CAND];

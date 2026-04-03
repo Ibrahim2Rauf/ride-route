@@ -14,7 +14,7 @@
 
 using namespace std;
 
-/* ================= COLOR CODES ================= */
+
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"
 #define RED     "\033[31m"
@@ -38,7 +38,7 @@ using namespace std;
 #define BG_CYAN    "\033[46m"
 #define BG_WHITE   "\033[47m"
 
-/* ================= ENABLE COLORS FOR WINDOWS ================= */
+
 void enableANSI() {
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD dwMode = 0;
@@ -50,7 +50,7 @@ void enableANSI() {
     SetConsoleOutputCP(CP_UTF8);
 }
 
-/* ================= GLOBAL OBJECTS ================= */
+
 
 RiderList riders;
 DriverList drivers;
@@ -62,22 +62,22 @@ HistoryList history;
 Security security;
 Admin admin;
 
-/* ================= SESSION VARIABLES ================= */
+
 
 int currentRiderID = -1;
 int currentDriverID = -1;
 
-/* ================= FUNCTION DECLARATIONS ================= */
+
 
 void riderMenu();
 void driverMenu();
 void adminMenu();
 void bookRide();
 
-/* ========================= MAIN ========================= */
+
 
 int main() {
-    // Enable ANSI colors for Windows
+    
     enableANSI();
     
     // Load data
@@ -103,7 +103,7 @@ int main() {
     do {
         system("cls");
         
-        // Beautiful header with gradient effect
+       
         cout << "\n\n";
         cout << BOLD << CYAN << "          ╔══════════════════════════════════════════════════╗\n";
         cout << "          ║                                                  ║\n";
@@ -153,7 +153,7 @@ int main() {
     return 0;
 }
 
-/* ========================= RIDER ========================= */
+
 
 void riderMenu() {
     int ch;
@@ -271,7 +271,7 @@ void riderMenu() {
     currentRiderID = -1;
 }
 
-/* ========================= DRIVER ========================= */
+
 
 void driverMenu() {
     int ch;
@@ -348,7 +348,7 @@ void driverMenu() {
     currentDriverID = -1;
 }
 
-/* ========================= BOOK RIDE ========================= */
+
 
 void bookRide() {
     if(currentRiderID == -1) {
@@ -462,7 +462,7 @@ void bookRide() {
     system("pause");
 }
 
-/* ========================= ADMIN ========================= */
+
 
 void adminMenu() {
     if(!admin.login()) {

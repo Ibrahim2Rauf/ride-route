@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-// Forward declarations
+
 class RiderList;
 class DriverList;
 

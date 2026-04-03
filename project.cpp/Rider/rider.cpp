@@ -5,12 +5,12 @@
 #include <iomanip>
 using namespace std;
 
-/*==================== CONSTRUCTOR ====================*/
+
 RiderList::RiderList() { 
     head = nullptr;
 }
 
-/*==================== DESTRUCTOR ====================*/
+
 RiderList::~RiderList() {
     Rider* temp;
     while(head) {
@@ -20,7 +20,7 @@ RiderList::~RiderList() {
     }
 }
 
-/*==================== GENERATE UNIQUE ID ====================*/
+
 int RiderList::generateID() {
     int maxID = 0;
     Rider* temp = head;
@@ -32,7 +32,7 @@ int RiderList::generateID() {
     return maxID + 1;
 }
 
-/*==================== LOAD RIDERS FROM FILE ====================*/
+
 void RiderList::loadFromFile(const string& filename) {
     ifstream fin(filename);
     if(!fin) return;
@@ -57,7 +57,7 @@ void RiderList::loadFromFile(const string& filename) {
     fin.close();
 }
 
-/*==================== SAVE RIDERS TO FILE ====================*/
+
 void RiderList::saveToFile(const string& filename) {
     ofstream fout(filename);
     Rider* temp = head;
@@ -72,7 +72,7 @@ void RiderList::saveToFile(const string& filename) {
     fout.close();
 }
 
-/*==================== REGISTER NEW RIDER ====================*/
+
 void RiderList::registerRider() {
     Rider* newRider = new Rider;
     newRider->id = generateID();
@@ -96,7 +96,7 @@ void RiderList::registerRider() {
          << newRider->id << "\n";
 }
 
-/*==================== LOGIN RIDER ====================*/
+
 bool RiderList::loginRider(int &riderID) {
     string phone, password;
 
@@ -120,7 +120,7 @@ bool RiderList::loginRider(int &riderID) {
     return false;
 }
 
-/*==================== VIEW RIDER PROFILE ====================*/
+
 void RiderList::viewRiderProfile(int riderID) {
     Rider* temp = head;
     while(temp) {
@@ -138,7 +138,7 @@ void RiderList::viewRiderProfile(int riderID) {
     cout << "Rider not found!\n";
 }
 
-/*==================== ADD MONEY TO WALLET ====================*/
+
 void RiderList::addWallet(int riderID, double amount) {
     Rider* temp = head;
     while(temp) {
@@ -154,7 +154,7 @@ void RiderList::addWallet(int riderID, double amount) {
     cout << "Rider not found!\n";
 }
 
-/*==================== GET RIDER NODE POINTER ====================*/
+
 Rider* RiderList::getRider(int riderID) {
     Rider* temp = head;
     while(temp) {
@@ -165,7 +165,7 @@ Rider* RiderList::getRider(int riderID) {
     return nullptr;
 }
 
-/*==================== DELETE RIDER ====================*/
+
 void RiderList::deleteRider(int riderID) {
     if (!head) {
         cout << "No riders found!\n";
@@ -194,7 +194,6 @@ void RiderList::deleteRider(int riderID) {
     cout << "Rider not found!\n";
 }
 
-/*==================== PRINT ALL RIDERS ====================*/
 void RiderList::printAll() { 
     if (!head) {
         cout << "No riders available!\n";

@@ -16,10 +16,10 @@ class MatchEngine {
 private:
     Graph* graph;                
     DriverList* drivers;         
-    // We'll make this map reasonably large; if driver IDs exceed,hum constant adjust krskte hain.
+    
     int driverLocation[MAX_DRIVERS_INDEX];
 
-    // internal heap for matching (min-heap of MatchResult by totalCost)
+    
     struct HeapItem {
         int driverID;
         double totalCost;
@@ -35,7 +35,7 @@ public:
     void linkGraph(Graph* g);
     void linkDrivers(DriverList* d);
 
-    // set driver current location (node number)
+
     void setDriverLocation(int driverID, int node);
     int matchByCheapestFare(int riderID); 
     int matchByNearest(int srcNode); 

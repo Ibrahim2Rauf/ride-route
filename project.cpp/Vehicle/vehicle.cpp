@@ -1,4 +1,4 @@
-#include "Vehicle.h"         // Vehicle aur VehicleList ke structures
+#include "Vehicle.h"        
 #include <iostream>          
 #include <fstream>           
 #include <sstream>           
@@ -17,7 +17,7 @@ VehicleList::~VehicleList() {
     while (head) {           
         temp = head;
         head = head->next;
-        delete temp;          // memory free
+        delete temp;        
     }
 }
 
@@ -25,21 +25,21 @@ VehicleList::~VehicleList() {
 int VehicleList::generateVehicleID() {
     int maxID = 0;
     Vehicle* temp = head;
-    while (temp) {            // poori list traverse
+    while (temp) {          
         if (temp->vehicleID > maxID)
             maxID = temp->vehicleID; 
         temp = temp->next;
     }
-    return maxID + 1;         // next unique ID
+    return maxID + 1;       
 }
 
-// Load vehicles from file
+
 void VehicleList::loadFromFile(const string& filename) {
     ifstream fin(filename);
     if (!fin) return;         
 
     string line;
-    while (getline(fin, line)) { // har line read
+    while (getline(fin, line)) { 
         stringstream ss(line);
         Vehicle* v = new Vehicle;
 
@@ -52,18 +52,18 @@ void VehicleList::loadFromFile(const string& filename) {
         getline(ss, v->type, ',');                    
         getline(ss, line, ','); v->rating = stod(line);  
 
-        v->next = head;         // front insertion
+        v->next = head;         
         head = v;
     }
      fin.close();
 }
 
-// Save vehicles to file
+
 void VehicleList::saveToFile(const string& filename) {
     ofstream fout(filename);
      Vehicle* temp = head;
     while (temp) {
-        fout << temp->vehicleID << ","//save horha hai vehicle id in file 
+        fout << temp->vehicleID << ","
              << temp->driverID << ","
              << temp->brand << ","
              << temp->model << ","
@@ -77,10 +77,10 @@ void VehicleList::saveToFile(const string& filename) {
      fout.close();
 }
 
-// Add new vehicle
+
 void VehicleList::addVehicle(int driverID) {
     Vehicle* v = new Vehicle;
-    v->vehicleID = generateVehicleID(); // unique vehicleID
+    v->vehicleID = generateVehicleID(); 
     v->driverID = driverID;
 
     cout << "Enter Brand: "; cin.ignore(); getline(cin, v->brand); 
@@ -89,11 +89,11 @@ void VehicleList::addVehicle(int driverID) {
     cout << "Enter Plate Number: "; getline(cin, v->plateNumber);
     cout << "Vehicle Type (Bike/Car/Rickshaw): "; getline(cin, v->type);
 
-    v->rating = 5.0;          // default rating
-    v->next = head;            // front insertion
+    v->rating = 5.0;          
+    v->next = head;           
     head = v;
 
-    saveToFile("Vehicle/vehicles.txt"); // save data
+    saveToFile("Vehicle/vehicles.txt"); 
     cout << "Vehicle registered successfully.\n";
 }
 
@@ -112,18 +112,17 @@ void VehicleList::updateVehicle(int driverID) {
     cout << "Vehicle updated.\n";
 }
 
-// Get vehicle by driverID
+
 Vehicle* VehicleList::getVehicleByDriver(int driverID) {
     Vehicle* temp = head;
     while (temp) {
         if (temp->driverID == driverID)
-            return temp;        // match mil gaya
+            return temp;       
         temp = temp->next;
     }
-    return nullptr;             // nahi mila
-}
+    return nullptr;   }         
 
-// Display vehicle info for driver
+
 void VehicleList::displayVehicle(int driverID) {
     Vehicle* v = getVehicleByDriver(driverID);
     if (!v) { cout << "Vehicle not found.\n"; return; }
@@ -137,7 +136,7 @@ void VehicleList::displayVehicle(int driverID) {
     cout << "Rating: " << v->rating << "\n";
 }
 
-// View all vehicles
+
 void VehicleList::viewAllVehicles() {
     Vehicle* temp = head;
     cout << "------ All Registered Vehicles ------\n";
@@ -149,7 +148,7 @@ void VehicleList::viewAllVehicles() {
     }
 }
 
-// DELETE vehicle by driverID
+
 void VehicleList::deleteVehicle(int driverID) {
     Vehicle* cur = head;
     Vehicle* prev = nullptr;
@@ -159,13 +158,13 @@ void VehicleList::deleteVehicle(int driverID) {
             if (prev == nullptr) head = cur->next;
             else prev->next = cur->next;
 
-            delete cur;               // memory free
-            saveToFile("Vehicle/vehicles.txt"); // update file
+            delete cur;              
+            saveToFile("Vehicle/vehicles.txt");
             cout << "Vehicle deleted.\n";
             return;
         }
         prev = cur;
         cur = cur->next;
     }
-    // agar nahi mila, kuch nahi karna
+    
 }

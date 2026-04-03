@@ -3,14 +3,14 @@
 #include <iostream>
 using namespace std;
 
-/* ================== GRAPH CONSTRUCTOR ================== */
+
 Graph::Graph() {
     nodeCount = MAX_NODES;
     for (int i = 0; i <= MAX_NODES; ++i)
         adj[i] = nullptr;
 }
 
-/* ================== GRAPH DESTRUCTOR ================== */
+
 Graph::~Graph() {
     for (int i = 0; i <= MAX_NODES; ++i) {
         Edge* e = adj[i];
@@ -34,7 +34,7 @@ int Graph::getNodeCount() {
     return nodeCount;
 }
 
-/* ================== ADD EDGE ================== */
+
 void Graph::addEdge(int u, int v, int weight) {
     if (u < 1 || u > nodeCount || v < 1 || v > nodeCount) return;
     Edge* e = new Edge;

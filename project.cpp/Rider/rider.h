@@ -4,7 +4,7 @@
 #include <string>      
 using namespace std;
 
-// Rider structure
+
 struct Rider {
     int id;          
     string name;      
@@ -20,8 +20,8 @@ private:
     Rider* head;       
 
 public:
-    RiderList();       // constructor
-    ~RiderList();      // destructor
+    RiderList();     
+    ~RiderList();    
 
     int generateID(); 
     void loadFromFile(const string& filename); 
@@ -33,11 +33,11 @@ public:
     void addWallet(int riderID, double amount); 
     void printAll();                     
 
-    // Helper to get Rider pointer by ID
+  
     Rider* getRider(int riderID);          
 
     // DELETE
     void deleteRider(int riderID);         
 };
 
-#endif   // header guard end
+#endif   

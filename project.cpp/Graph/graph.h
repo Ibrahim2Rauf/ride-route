@@ -1,43 +1,41 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-/* ================== CONSTANTS ================== */
+
 #define MAX_NODES 100
 #define INF 1000000000
 
-/* ================== EDGE STRUCT (ADJACENCY LIST) ================== */
+
 struct Edge {
     int to;
     int weight;
     Edge* next;
 };
 
-/* ================== GRAPH CLASS ================== */
 class Graph {
 private:
 
-    /* ===== ADJACENCY LIST ===== */
+  
     Edge* adj[MAX_NODES + 1];
     int nodeCount;
 
-    /* ===== MIN-HEAP ITEM STRUCT ===== */
+   
     struct HeapItem {
         int node;
         int dist;
     };
 
-    /* ===== MIN-HEAP HELPER FUNCTIONS ===== */
     void heapSwap(HeapItem* A, int i, int j);
     void heapPush(HeapItem* heap, int &size, HeapItem item);
     HeapItem heapPop(HeapItem* heap, int &size);
 
 public:
 
-    /* ===== CONSTRUCTOR / DESTRUCTOR ===== */
+ 
     Graph();
     ~Graph();
 
-    /* ===== GRAPH SIZE FUNCTIONS ===== */
+  
     void setNodeCount(int n);
     int getNodeCount();
 

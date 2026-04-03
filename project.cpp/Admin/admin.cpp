@@ -7,9 +7,7 @@
 #include <iomanip>
 using namespace std;
 
-/* ===========================
-   ADMIN LOGIN
-=========================== */
+
 bool Admin::login() {
     string u, p;
     cout << "Enter admin username: ";
@@ -23,13 +21,12 @@ bool Admin::login() {
     }
 
     cout << "Invalid admin credentials.\n";
-    return false;
+return false;
 }
 
 
-/* ===========================
-   VIEW ALL RIDERS
-=========================== */
+
+ 
 void Admin::viewAllRiders() {
     ifstream fin("Rider/riders.txt");
     if (!fin) {
@@ -58,9 +55,7 @@ void Admin::viewAllRiders() {
 }
 
 
-/* ===========================
-   VIEW ALL DRIVERS
-=========================== */
+
 void Admin::viewAllDrivers() {
     ifstream fin("Driver/drivers.txt");
     if (!fin) {
@@ -104,9 +99,6 @@ void Admin::viewAllDrivers() {
 }
 
 
-/* ===========================
-   VIEW ALL VEHICLES
-=========================== */
 void Admin::viewAllVehicles() {
     ifstream fin("Vehicle/vehicles.txt");
     if (!fin) {
@@ -144,9 +136,7 @@ void Admin::viewAllVehicles() {
 }
 
 
-/* ===========================
-   VIEW ALL RIDES (History)
-=========================== */
+
 void Admin::viewAllRides() {
     ifstream fin("History/history.txt");
     if (!fin) {
@@ -167,9 +157,7 @@ void Admin::deleteRider(int riderID, RiderList &riders) {
     cout << "✅ Rider deleted successfully!\n";
 }
 
-/* ==========================
-   DELETE DRIVER
-========================== */
+
 void Admin::deleteDriver(int driverID, DriverList &drivers) {
     drivers.deleteDriver(driverID);
     cout << "✅ Driver deleted successfully!\n";

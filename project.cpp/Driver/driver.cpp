@@ -1,4 +1,4 @@
-#include "Driver.h"          // Driver aur DriverList ki definitions
+#include "Driver.h"         
 #include <iostream>         
 #include <fstream>        
 #include <sstream>          
@@ -28,7 +28,7 @@ DriverList::~DriverList() {
             cur = cur->next;
             delete t;               
         }
-        table[i] = nullptr;         // bucket reset
+        table[i] = nullptr;        
     }
 }
 
@@ -37,7 +37,7 @@ int DriverList::hashFunc(int id) {
     return id % TABLE_SIZE;         
 }
 
-// Generate unique ID (scan entire table for max id)
+
 int DriverList::generateID() {
     int maxID = 0;                  
     for (int i = 0; i < TABLE_SIZE; ++i) {
@@ -75,19 +75,19 @@ void DriverList::loadFromFile(const string& filename) {
         getline(ss, token, ','); d->wallet = stod(token);   
         getline(ss, d->vehicleNumber);                 
 
-        int idx = hashFunc(d->id);   // hash index nikala
-        d->next = table[idx];        // front insertion in hash bucket
+        int idx = hashFunc(d->id);   
+        d->next = table[idx];        
         table[idx] = d;
     }
-    fin.close();                     // file close
+    fin.close();                   
 }
 
 // Save drivers to file (CSV)
 void DriverList::saveToFile(const string& filename) {
-    ofstream fout(filename);         // file open writing ke liye
+    ofstream fout(filename);         
     for (int i = 0; i < TABLE_SIZE; ++i) {
         Driver* cur = table[i];
-        while (cur) {               // har driver ka data save
+        while (cur) {             
             fout << cur->id << ","
                  << cur->name << ","
                  << cur->phone << ","
@@ -102,17 +102,17 @@ void DriverList::saveToFile(const string& filename) {
             cur = cur->next;
         }
     }
-    fout.close();                    // file close
+    fout.close();                   
 }
 
 // Register Driver
 void DriverList::registerDriver() {
-    Driver* d = new Driver;          // naya driver
-    d->id = generateID();            // unique id assign
+    Driver* d = new Driver;          
+    d->id = generateID();            
 
     cout << "Enter Name: ";
     cin.ignore();
-    getline(cin, d->name);           // full name input
+    getline(cin, d->name);         
 
     cout << "Enter Phone: ";
     cin >> d->phone;
@@ -132,9 +132,9 @@ void DriverList::registerDriver() {
     cout << "Enter Fare per KM: ";
     cin >> d->farePerKm;
 
-    d->wallet = 500.0;               // default wallet amount
+    d->wallet = 500.0;             
 
-    //  Driver ke sath vehicle automatically add hoti hai
+    
     if (vehicles != nullptr) {
         vehicles->addVehicle(d->id);
     }
@@ -145,7 +145,7 @@ void DriverList::registerDriver() {
     d->next = table[idx];           
     table[idx] = d;
 
-    saveToFile("Driver/drivers.txt"); // data file mein save
+    saveToFile("Driver/drivers.txt"); 
     cout << "Driver registered successfully! Driver ID: " << d->id << "\n";
 }
 
@@ -155,7 +155,7 @@ Driver* DriverList::findByPhone(const string& phone) {
         Driver* cur = table[i];
         while (cur) {
             if (cur->phone == phone)
-                return cur;          // phone match ho gaya
+                return cur;         
             cur = cur->next;
         }
     }
@@ -185,7 +185,7 @@ bool DriverList::loginDriver(int &driverID) {
 
 // View driver profile
 void DriverList::viewDriverProfile(int driverID) {
-    Driver* d = getDriver(driverID); // id se driver nikala
+    Driver* d = getDriver(driverID); 
     if (!d) {
         cout << "Driver not found!\n";
         return;
@@ -217,7 +217,7 @@ void DriverList::updateFare(int driverID, double newFare) {
         return;
     }
 
-    d->farePerKm = newFare;          // fare update
+    d->farePerKm = newFare;         
     saveToFile("Driver/drivers.txt");
     cout << "Fare updated.\n";
 }
@@ -230,7 +230,7 @@ void DriverList::acceptRide(int driverID) {
         return;
     }
 
-    d->status = "Busy";              // driver busy ho gaya
+    d->status = "Busy";             
     saveToFile("Driver/drivers.txt");
     cout << "Ride Accepted.\n";
 }
@@ -240,20 +240,20 @@ void DriverList::completeRide(int driverID) {
     Driver* d = getDriver(driverID);
     if (!d) return;
 
-    d->status = "Available";         // ride complete hone ke baad available
+    d->status = "Available";         
     saveToFile("Driver/drivers.txt");
 }
 
 // DELETE driver (plus delete linked vehicle)
 void DriverList::deleteDriver(int driverID) {
-    int idx = hashFunc(driverID);    // primary hash index
+    int idx = hashFunc(driverID);    
     Driver* cur = table[idx];
     Driver* prev = nullptr;
 
     while (cur) {
         if (cur->id == driverID) {
             if (vehicles != nullptr) {
-                vehicles->deleteVehicle(driverID); // linked vehicle delete
+                vehicles->deleteVehicle(driverID); 
             }
 
             if (prev == nullptr)
@@ -261,7 +261,7 @@ void DriverList::deleteDriver(int driverID) {
             else
                 prev->next = cur->next;
 
-            delete cur;              // driver memory free
+            delete cur;              
             saveToFile("Driver/drivers.txt");
             cout << "Driver deleted successfully!\n";
             return;
@@ -270,7 +270,7 @@ void DriverList::deleteDriver(int driverID) {
         cur = cur->next;
     }
 
-    // fallback: agar wrong bucket mein ho to full scan
+   
     for (int i = 0; i < TABLE_SIZE; ++i) {
         cur = table[i];
         prev = nullptr;
@@ -297,7 +297,7 @@ void DriverList::deleteDriver(int driverID) {
     cout << "Driver not found!\n";
 }
 
-// Get driver by ID
+
 Driver* DriverList::getDriver(int driverID) {
     int idx = hashFunc(driverID);
     Driver* cur = table[idx];
@@ -308,7 +308,7 @@ Driver* DriverList::getDriver(int driverID) {
         cur = cur->next;
     }
 
-    // fallback full scan
+    
     for (int i = 0; i < TABLE_SIZE; ++i) {
         cur = table[i];
         while (cur) {
@@ -320,7 +320,7 @@ Driver* DriverList::getDriver(int driverID) {
     return nullptr;
 }
 
-// PRINT ALL Drivers (for Admin)
+
 void DriverList::printAll() {
     cout << "\n===== ALL DRIVERS =====\n";
 

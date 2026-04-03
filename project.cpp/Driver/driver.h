@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-#include "../Vehicle/Vehicle.h"   // link vehicle module
+#include "../Vehicle/Vehicle.h"   
 
 struct Driver {
     int id;
@@ -29,7 +29,7 @@ private:
     // vehicle module pointer
     VehicleList* vehicles;
 
-    int hashFunc(int id); // simple hash function
+    int hashFunc(int id); 
 
 public:
     DriverList(); 
@@ -50,7 +50,7 @@ public:
     void acceptRide(int driverID);
     void completeRide(int driverID);
 
-    void printAll(); // PRINT ALL Drivers (for Admin)
+    void printAll(); 
     // DELETE
     void deleteDriver(int driverID); 
     Driver* getDriver(int driverID);  

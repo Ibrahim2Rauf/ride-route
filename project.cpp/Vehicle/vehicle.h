@@ -5,13 +5,13 @@
 using namespace std;
 
 struct Vehicle {
-    int vehicleID;      // Unique ID
-    int driverID;       // Which driver owns this vehicle
+    int vehicleID;     
+    int driverID;     
     string brand;       
     string model;       
     string color;       
     string plateNumber; 
-    string type;        // Bike / Car / Rickshaw
+    string type;       
     double rating;      
     Vehicle* next;
 };
@@ -33,7 +33,7 @@ public:
     Vehicle* getVehicleByDriver(int driverID);
     void displayVehicle(int driverID);
 
-    void viewAllVehicles(); // admin use
+    void viewAllVehicles(); 
 
     // DELETE
     void deleteVehicle(int driverID);
