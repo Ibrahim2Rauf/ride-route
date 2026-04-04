@@ -1,5 +1,4 @@
-6,3,honda,23,red,112233,bike,5.0
-4,1,honda,24,rd,1122,bike,5.0
+7,4,honda,20,red,12345,car,5.0
 2,6,civics,24,white,234,car,5.0
 1,5,honda,24,red,2244,bike,5.0
 3,7,honda,24,red,123,bike,5.0
